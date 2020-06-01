@@ -13,44 +13,44 @@ new Vue({
         },
         attack: function(){
 
-            var damage = this.calculateDamage(10, 3);
-            this.monsterHealth -= damage;
-
-            if(this.monsterHealth <= 0){
-                alert("You won!");
-                this.gameIsRunning = false;
-                return;
-            }
+            this.playerAttack();
 
             if(this.checkWin()){
                 return;
             }
 
-            damage = this.calculateDamage(10, 3);
-            this.playerHealth -= damage;
+            this.monsterAttack();
 
             this.checkWin();
         },
+        playerAttack: function(){
+            this.monsterHealth -= this.calculateDamage(10,3);
+        },
+        monsterAttack: function(){
+            this.playerHealth -= this.calculateDamage(12,3);
+        },
         specialAttack: function(){
+            this.monsterHealth -= this.calculateDamage(20, 10);
+            if(this.checkWin()){
+                return;
+            }
+            this.monsterAttack();
+            this.checkWin();
 
-            var damage = this.calculateDamage(20, 10);
-            this.monsterHealth -= damage;
-
-            damage = this.calculateDamage(20, 10);
-            this.playerHealth -= damage;
+            
         },
         heal: function(){
-            var max = 10;
-            var min = 5;
-
-            var heal =  this.calculateHeal(10,5);
-            this.monsterHealth += heal;
-
-            heal =  this.calculateHeal(10,5);
-            this.playerHealth += Math.max(Math.floor(Math.random() * max) + 1, min);
+            if(this.playerHealth >= 90){
+                this.playerHealth = 100;
+            }
+            else{
+                this.playerHealth += 10;
+            }
+            this.monsterAttack();
         },
         giveUp: function(){
-
+            this.playerHealth = 0;
+            this.checkWin();
         },
         calculateDamage: function(max,min){
             return  Math.max(Math.floor(Math.random() * max) + 1, min);
